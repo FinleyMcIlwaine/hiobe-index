@@ -1,0 +1,17 @@
+# # config file version
+apiVersion: 1
+
+# list of datasources to insert/update depending
+# on what's available in the database
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    database: eventlog
+    url: http://influxdb:8086
+    basicAuth: true
+    basicAuthUser: admin
+    jsonData:
+      httpMode: POST
+    secureJsonData:
+      basicAuthPassword: admin

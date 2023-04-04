@@ -1,6 +1,15 @@
 dist-newstyle
-.envrc
+cabal.project.local
+
+# Profiling assets
 *.socket
+*.sock
+*.eventlog
+*.hp
+
+# Executables (convenient if cabal installing with --installdir=.)
 hiobe-server
 hiobe-traffic
 hiobe-debugger
+
+.envrc

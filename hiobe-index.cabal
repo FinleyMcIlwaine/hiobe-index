@@ -73,7 +73,7 @@ executable hiobe-traffic
 
 executable hiobe-debugger
   import:           lang
-  hs-source-dirs:   debugger
+  hs-source-dirs:   profiling/debugger
   main-is:          Main.hs
   build-depends:
       base >=4.16.3.0

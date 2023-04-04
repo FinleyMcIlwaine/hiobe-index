@@ -4,17 +4,16 @@ module Database where
 
 import Control.Concurrent
 import Control.Monad.IO.Class
-import Data.List              qualified as List
-import Data.Map.Strict        (Map)
-import Data.Map.Strict        qualified as Map
-import Data.Maybe
-import Data.Set               (Set)
-import Data.Set               qualified as Set
-import Data.Text              (Text)
-import Data.Text              qualified as T
-import Foreign
-
 import Database.SQLite.Simple
+import Data.List qualified as List
+import Data.Map.Strict (Map)
+import Data.Map.Strict qualified as Map
+import Data.Maybe
+import Data.Set (Set)
+import Data.Set qualified as Set
+import Data.Text (Text)
+import Data.Text qualified as T
+import Foreign
 
 import Common
 import State
@@ -22,8 +21,8 @@ import Debug.Trace
 
 runDB :: (Connection -> IO a) -> HiobeM a
 runDB f = do
-  conn <- gets dbConn
-  liftIO $ withMVar conn f
+    conn <- gets dbConn
+    liftIO $ withMVar conn f
 
 data LangType = LangHave | LangWant
 
@@ -42,6 +41,7 @@ toQuery Comp = "ConvertedCompYearly"
 -- database.
 listLangs :: Connection -> IO [Text]
 listLangs conn = do
+    traceMarkerIO "listing langs"
     ls <- concatMap langRowToLangs <$> query_ conn q
     return $ List.nub ls
   where
@@ -82,6 +82,7 @@ countLangStream conn (toQuery . toCol -> col) lang =
 -- | Naive @buildHist@ implementation, doesn't stream
 buildHist :: Connection -> LangType -> IO (Map Text Integer)
 buildHist conn (toQuery . toCol -> col) = do
+    traceMarkerIO "building lang histogram"
     ls <- concatMap langRowToLangs <$> query_ conn q
     return $ foldr (\l h -> Map.insertWith (+) l 1 h) Map.empty ls
   where
@@ -118,11 +119,11 @@ insertResponse conn resp = do
       ]
 
 toQueryArgs :: SurveyResponse -> (Maybe Text, Maybe Text, Maybe Integer)
-toQueryArgs resp = (
-    toResponseFormat $ haveWorkedWith resp
-  , toResponseFormat $ wantToWorkWith resp
-  , yearlyComp resp
-  )
+toQueryArgs resp =
+    ( toResponseFormat $ haveWorkedWith resp
+    , toResponseFormat $ wantToWorkWith resp
+    , yearlyComp resp
+    )
 
 langRowToLangs :: [Maybe Text] -> [Text]
 langRowToLangs = concatMap (T.splitOn ";") . catMaybes

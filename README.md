@@ -48,7 +48,7 @@ Submit your own response to the HIOBE Index survey.
 Example request:
 
 ```
-curl -X POST http://localhost:3000/survey/respond -d '
+curl -X POST http://localhost:3001/survey/respond -d '
 {
     "haveWorkedWith": ["python","java","go","erlang","lua","javascript","typescript","clojure"],
     "wantToWorkWith": ["haskell"],
@@ -97,5 +97,6 @@ it is, so we also have an executable application that generates traffic (in
 HIOBE Index, and also generates some nice request traffic.
 
 Unfortunately, in a sick twist of fate, the HIOBE Index server application has
-been having some memory issues. In this portion of the workshop, we will analyse
-the HIOBE Index server application using `eventlog2html` and `ghc-debug`.
+been having some memory issues. You are invited to profile the `hiobe-server`
+application with tools such as `eventlog2html` and `ghc-debug` in order to
+figure out how to fix these issues.

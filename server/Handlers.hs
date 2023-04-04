@@ -9,14 +9,15 @@ import Handlers.Survey    qualified as Survey
 import State
 
 handlers :: ScottyT L.Text HiobeM ()
-handlers = mconcat [
-    truth
-  , Languages.handlers
-  , Survey.handlers
-  ]
+handlers =
+    mconcat [
+        truth
+      , Languages.handlers
+      , Survey.handlers
+      ]
 
 -- | Serves truth
 truth :: ScottyT L.Text HiobeM ()
 truth =
-  get "/truth" $
-    text "HIOBE: Haskell Is Obviously Better at Everything"
+    get "/truth" $
+      text "HIOBE: Haskell Is Obviously Better at Everything"

@@ -45,7 +45,7 @@ runHiobe HiobeConfig{..} =
 
         let runActionToIO m = runReaderT (runHiobeM m) sync
 
-        scottyT 3000 runActionToIO handlers
+        scottyT 3001 runActionToIO handlers
   where
     maybeGhcDebug :: IO () -> IO ()
     maybeGhcDebug theMain =
