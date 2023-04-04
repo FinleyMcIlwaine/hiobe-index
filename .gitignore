@@ -1,2 +1,6 @@
 dist-newstyle
 .envrc
+*.socket
+hiobe-server
+hiobe-traffic
+hiobe-debugger
