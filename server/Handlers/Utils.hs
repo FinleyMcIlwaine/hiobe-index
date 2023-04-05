@@ -15,6 +15,9 @@ trackPath = do
     p <- decodeUtf8 . rawPathInfo <$> request
     hiobeM $ putReq p
 
+trackResponse :: ActionT L.Text HiobeM ()
+trackResponse = hiobeM putResp
+
 trackLang :: Text -> ActionT L.Text HiobeM ()
 trackLang l = hiobeM $ putLang l
 

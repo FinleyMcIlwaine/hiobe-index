@@ -1,20 +1,14 @@
 {-# LANGUAGE RecordWildCards #-}
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-
-{-# HLINT ignore "Use unless" #-}
 
 module Main where
 
 import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Monad.Reader
-import Data.Text.Lazy qualified as L
+import Database.SQLite.Simple
 import Options.Applicative
 import System.Directory
 import System.Environment
-import System.Exit
-
-import Database.SQLite.Simple
 import Web.Scotty.Trans hiding (header)
 
 import GHC.Debug.Stub
@@ -41,7 +35,7 @@ runHiobe HiobeConfig{..} =
       -- initialise app state
       withConnection hiobeConfigDbFile $ \conn -> do
         db <- newMVar conn
-        sync <- newTVarIO (initState db)
+        sync <- newTVarIO (initState hiobeConfigEnableTraces db)
 
         let runActionToIO m = runReaderT (runHiobeM m) sync
 
@@ -76,6 +70,7 @@ data HiobeConfig = HiobeConfig
     { hiobeConfigDbFile         :: FilePath
     , hiobeConfigWithGhcDebug   :: Maybe FilePath
     , hiobeConfigEventlogSocket :: Maybe FilePath
+    , hiobeConfigEnableTraces   :: Bool
     }
   deriving Show
 
@@ -101,6 +96,11 @@ hiobeConfigParser = HiobeConfig
                       "Path at which to create a GHC eventlog socket (default: "
                    ++ "no socket, write eventlog to file)"
                  )
+          )
+    <*> switch (
+               long "enable-traces"
+            <> short 't'
+            <> help "Enable trace events"
           )
 
 hiobeConfigParserInfo :: ParserInfo HiobeConfig

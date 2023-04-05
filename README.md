@@ -47,7 +47,7 @@ Submit your own response to the HIOBE Index survey.
 
 Example request:
 
-```
+```bash
 curl -X POST http://localhost:3001/survey/respond -d '
 {
     "haveWorkedWith": ["python","java","go","erlang","lua","javascript","typescript","clojure"],
@@ -58,7 +58,7 @@ curl -X POST http://localhost:3001/survey/respond -d '
 
 Example response:
 
-```
+```json
 {
     "message": "Thanks!",
     "responseId": 73858

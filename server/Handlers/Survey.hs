@@ -12,7 +12,7 @@ import State
 handlers :: ScottyT L.Text HiobeM ()
 handlers = do
     post "/survey/respond" $ do
-      trackPath
+      trackResponse
       resp <- jsonData @SurveyResponse
       forM_ (haveWorkedWith resp) trackLang
       forM_ (wantToWorkWith resp) trackLang

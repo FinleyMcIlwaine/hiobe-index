@@ -18,6 +18,7 @@ common lang
     TupleSections
     TypeApplications
     NumericUnderscores
+  ghc-options: -Wall
 
 executable hiobe-server
   import:           lang

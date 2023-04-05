@@ -17,7 +17,6 @@ import Foreign
 
 import Common
 import State
-import Debug.Trace
 
 runDB :: (Connection -> IO a) -> HiobeM a
 runDB f = do
@@ -41,7 +40,6 @@ toQuery Comp = "ConvertedCompYearly"
 -- database.
 listLangs :: Connection -> IO [Text]
 listLangs conn = do
-    traceMarkerIO "listing langs"
     ls <- concatMap langRowToLangs <$> query_ conn q
     return $ List.nub ls
   where
@@ -63,7 +61,6 @@ listLangsStream conn = Set.toList <$>
 -- | Naive @countLang@ implementation, doesn't stream
 countLang :: Connection -> LangType -> Text -> IO Integer
 countLang conn (toQuery . toCol -> col) lang = do
-    traceMarkerIO "counting langs"
     ls <- concatMap langRowToLangs <$> query conn q ["%"<>lang<>"%"]
     return $ foldr ((+) . fromBool . (==lang)) 0 ls
   where
@@ -82,7 +79,6 @@ countLangStream conn (toQuery . toCol -> col) lang =
 -- | Naive @buildHist@ implementation, doesn't stream
 buildHist :: Connection -> LangType -> IO (Map Text Integer)
 buildHist conn (toQuery . toCol -> col) = do
-    traceMarkerIO "building lang histogram"
     ls <- concatMap langRowToLangs <$> query_ conn q
     return $ foldr (\l h -> Map.insertWith (+) l 1 h) Map.empty ls
   where
